@@ -1,0 +1,415 @@
+{
+  "identifier": "mobile_integration",
+  "version": "1.0.0",
+  "type": "integration_guide",
+
+  "ai_context": {
+    "purpose": "Mobile integration guide for React Native, Flutter, and native iOS/Android apps with the modular backend API",
+    "use_when": [
+      "Building mobile applications that consume the backend API",
+      "Implementing mobile authentication and user management",
+      "Adding push notifications and real-time features",
+      "Integrating AI functionality in mobile apps",
+      "Managing offline capabilities"
+    ],
+    "dont_use_when": [
+      "Building web-only applications",
+      "Server-side mobile backend development",
+      "Desktop application development"
+    ]
+  },
+
+  "platforms": {
+    "react_native": {
+      "setup": {
+        "dependencies": [
+          "@react-native-async-storage/async-storage",
+          "react-native-keychain",
+          "@react-native-community/netinfo",
+          "react-native-push-notification",
+          "react-native-image-picker",
+          "react-native-fs"
+        ],
+        "navigation": "React Navigation v6",
+        "state_management": "Redux Toolkit or Zustand"
+      },
+      "authentication": {
+        "storage": "Keychain (iOS) / Keystore (Android) for tokens",
+        "biometric": "react-native-biometrics for fingerprint/face ID",
+        "deep_linking": "Handle auth redirects from external providers"
+      }
+    },
+    "flutter": {
+      "setup": {
+        "dependencies": [
+          "http",
+          "dio",
+          "flutter_secure_storage",
+          "connectivity_plus",
+          "firebase_messaging",
+          "image_picker",
+          "path_provider"
+        ],
+        "navigation": "GoRouter or Navigator 2.0",
+        "state_management": "Riverpod or Bloc"
+      },
+      "authentication": {
+        "storage": "flutter_secure_storage for tokens",
+        "biometric": "local_auth for biometric authentication",
+        "deep_linking": "Handle custom URL schemes"
+      }
+    },
+    "ios_native": {
+      "setup": {
+        "networking": "URLSession or Alamofire",
+        "storage": "Keychain Services",
+        "ui": "SwiftUI or UIKit",
+        "architecture": "MVVM or Clean Architecture"
+      },
+      "authentication": {
+        "storage": "Keychain for secure token storage",
+        "biometric": "LocalAuthentication framework",
+        "oauth": "ASWebAuthenticationSession"
+      }
+    },
+    "android_native": {
+      "setup": {
+        "networking": "Retrofit + OkHttp",
+        "storage": "EncryptedSharedPreferences",
+        "ui": "Jetpack Compose or XML layouts",
+        "architecture": "MVVM with LiveData/Flow"
+      },
+      "authentication": {
+        "storage": "Android Keystore for tokens",
+        "biometric": "BiometricPrompt API",
+        "oauth": "Custom Tabs for OAuth flows"
+      }
+    }
+  },
+
+  "modules": {
+    "auth": {
+      "endpoints": {
+        "POST /auth/login": "User login",
+        "POST /auth/register": "User registration",
+        "POST /auth/refresh": "Refresh access token",
+        "POST /auth/logout": "User logout",
+        "GET /auth/me": "Get current user"
+      },
+      "mobile_considerations": {
+        "token_storage": "Use secure storage (Keychain/Keystore)",
+        "biometric_auth": "Optional biometric unlock",
+        "offline_auth": "Cache user data for offline access",
+        "session_management": "Handle app backgrounding/foregrounding"
+      },
+      "components": {
+        "react_native": {
+          "LoginScreen": "Full-screen login with form validation",
+          "BiometricPrompt": "Biometric authentication overlay",
+          "AuthGuard": "Navigation guard for protected screens"
+        },
+        "flutter": {
+          "LoginPage": "Stateful widget with form validation",
+          "BiometricDialog": "Platform-specific biometric prompt",
+          "AuthWrapper": "Widget wrapper for authentication state"
+        }
+      }
+    },
+
+    "users": {
+      "endpoints": {
+        "GET /users/profile": "Get user profile",
+        "PUT /users/profile": "Update user profile",
+        "POST /users/avatar": "Upload avatar",
+        "GET /users/settings": "Get user settings"
+      },
+      "mobile_features": {
+        "avatar_upload": "Camera/gallery integration",
+        "profile_editing": "Native form controls",
+        "settings_sync": "Sync settings across devices",
+        "offline_profile": "Cache profile data"
+      },
+      "components": {
+        "react_native": {
+          "ProfileScreen": "Scrollable profile with edit capabilities",
+          "AvatarPicker": "Camera/gallery selection modal",
+          "SettingsScreen": "Native-style settings list"
+        },
+        "flutter": {
+          "ProfilePage": "Custom scrollable with hero animations",
+          "ImagePickerDialog": "Bottom sheet with camera/gallery options",
+          "SettingsPage": "Platform-adaptive settings UI"
+        }
+      }
+    },
+
+    "teams": {
+      "mobile_features": {
+        "team_switching": "Quick team switcher in navigation",
+        "member_management": "Swipe actions for member operations",
+        "team_notifications": "Push notifications for team events",
+        "offline_teams": "Cache team data for offline access"
+      },
+      "components": {
+        "react_native": {
+          "TeamList": "FlatList with pull-to-refresh",
+          "TeamCard": "Touchable card with team info",
+          "MembersList": "Sectioned list with roles",
+          "TeamSwitcher": "Modal or dropdown for team selection"
+        },
+        "flutter": {
+          "TeamListView": "ListView with refresh indicator",
+          "TeamTile": "Custom tile with team branding",
+          "MembersGrid": "Grid view of team members",
+          "TeamDrawer": "Navigation drawer with teams"
+        }
+      }
+    },
+
+    "ai_integration": {
+      "mobile_considerations": {
+        "streaming": "Handle streaming responses efficiently",
+        "offline_mode": "Queue requests when offline",
+        "battery_optimization": "Minimize background AI processing",
+        "data_usage": "Warn users about data consumption"
+      },
+      "components": {
+        "react_native": {
+          "ChatInterface": "KeyboardAvoidingView with message list",
+          "AITextGenerator": "Modal with generation parameters",
+          "VoiceInput": "Speech-to-text integration",
+          "TypingIndicator": "Animated typing indicator"
+        },
+        "flutter": {
+          "ChatScreen": "Custom chat UI with animations",
+          "GenerationDialog": "Bottom sheet with AI options",
+          "SpeechInput": "Platform speech recognition",
+          "LoadingAnimation": "Custom AI thinking animation"
+        }
+      },
+      "optimizations": {
+        "response_caching": "Cache AI responses locally",
+        "request_queuing": "Queue requests when offline",
+        "streaming_ui": "Show partial responses as they arrive",
+        "error_recovery": "Retry failed AI requests"
+      }
+    },
+
+    "file_storage": {
+      "mobile_features": {
+        "camera_integration": "Direct camera capture",
+        "gallery_access": "Photo/video selection",
+        "file_preview": "Native file viewers",
+        "offline_files": "Download for offline access",
+        "background_upload": "Continue uploads in background"
+      },
+      "components": {
+        "react_native": {
+          "FileUploader": "Progress indicator with cancel option",
+          "MediaPicker": "Camera/gallery selection",
+          "FileViewer": "Platform-specific file viewer",
+          "DownloadManager": "Background download handling"
+        },
+        "flutter": {
+          "UploadWidget": "Custom upload progress UI",
+          "ImagePicker": "Multi-platform image selection",
+          "DocumentViewer": "PDF/document viewer integration",
+          "OfflineFiles": "Downloaded files management"
+        }
+      },
+      "permissions": {
+        "camera": "Camera access for photo/video capture",
+        "storage": "File system access for downloads",
+        "microphone": "Audio recording permissions"
+      }
+    },
+
+    "push_notifications": {
+      "setup": {
+        "firebase": "Firebase Cloud Messaging (FCM)",
+        "apns": "Apple Push Notification Service",
+        "registration": "Device token registration with backend",
+        "permissions": "Request notification permissions"
+      },
+      "features": {
+        "rich_notifications": "Images, actions, and custom layouts",
+        "deep_linking": "Navigate to specific screens",
+        "badge_management": "App icon badge updates",
+        "notification_categories": "Group notifications by type"
+      },
+      "components": {
+        "react_native": {
+          "NotificationHandler": "Global notification listener",
+          "PermissionRequest": "Native permission dialog",
+          "NotificationCenter": "In-app notification list",
+          "BadgeManager": "App badge management"
+        },
+        "flutter": {
+          "NotificationService": "Singleton notification handler",
+          "PermissionWidget": "Permission request UI",
+          "NotificationList": "Custom notification display",
+          "BadgePlugin": "Platform-specific badge updates"
+        }
+      }
+    },
+
+    "billing": {
+      "mobile_considerations": {
+        "in_app_purchases": "iOS App Store / Google Play billing",
+        "subscription_management": "Native subscription UI",
+        "receipt_validation": "Server-side receipt verification",
+        "restore_purchases": "Handle purchase restoration"
+      },
+      "components": {
+        "react_native": {
+          "PricingScreen": "Native-style pricing display",
+          "PurchaseButton": "Platform-specific purchase flow",
+          "SubscriptionStatus": "Current subscription display",
+          "RestorePurchases": "Restore previous purchases"
+        },
+        "flutter": {
+          "PricingPage": "Custom pricing UI with animations",
+          "PaymentSheet": "Bottom sheet for purchase options",
+          "SubscriptionCard": "Current plan display card",
+          "PurchaseHistory": "Transaction history view"
+        }
+      },
+      "integrations": {
+        "ios": "StoreKit for App Store purchases",
+        "android": "Google Play Billing Library",
+        "cross_platform": "react-native-iap or in_app_purchase (Flutter)"
+      }
+    }
+  },
+
+  "offline_capabilities": {
+    "data_sync": {
+      "strategy": "Last-write-wins or conflict resolution",
+      "storage": "SQLite or Realm for local database",
+      "queue": "Queue operations when offline",
+      "sync_indicators": "Show sync status to users"
+    },
+    "caching": {
+      "api_responses": "Cache GET requests with TTL",
+      "images": "Cache images with size limits",
+      "user_data": "Always cache user profile",
+      "critical_data": "Cache essential app data"
+    },
+    "components": {
+      "react_native": {
+        "OfflineIndicator": "Network status banner",
+        "SyncStatus": "Data synchronization indicator",
+        "CacheManager": "Manual cache management",
+        "OfflineQueue": "Pending operations display"
+      },
+      "flutter": {
+        "ConnectivityWidget": "Network connectivity indicator",
+        "SyncIndicator": "Sync progress display",
+        "CacheSettings": "Cache management settings",
+        "QueueViewer": "Offline operations queue"
+      }
+    }
+  },
+
+  "real_time": {
+    "websockets": {
+      "library": "socket.io-client or native WebSocket",
+      "reconnection": "Automatic reconnection with backoff",
+      "background_handling": "Maintain connection in background",
+      "battery_optimization": "Efficient connection management"
+    },
+    "events": {
+      "user_presence": "Online/offline status updates",
+      "team_updates": "Real-time team changes",
+      "ai_responses": "Streaming AI generation",
+      "notifications": "Real-time notification delivery"
+    },
+    "implementation": {
+      "react_native": {
+        "WebSocketService": "Singleton WebSocket manager",
+        "RealtimeProvider": "Context for real-time data",
+        "EventListener": "Component for event handling"
+      },
+      "flutter": {
+        "SocketService": "WebSocket service class",
+        "StreamProvider": "Real-time data streams",
+        "EventHandler": "Global event handling"
+      }
+    }
+  },
+
+  "security": {
+    "data_protection": {
+      "encryption": "Encrypt sensitive data at rest",
+      "secure_storage": "Use platform secure storage",
+      "certificate_pinning": "Pin SSL certificates",
+      "obfuscation": "Code obfuscation for production"
+    },
+    "authentication": {
+      "token_security": "Secure token storage and transmission",
+      "biometric_fallback": "PIN/password fallback",
+      "session_timeout": "Automatic session expiration",
+      "jailbreak_detection": "Detect compromised devices"
+    },
+    "api_security": {
+      "request_signing": "Sign API requests",
+      "rate_limiting": "Client-side rate limiting",
+      "input_validation": "Validate all user inputs",
+      "error_handling": "Don't expose sensitive errors"
+    }
+  },
+
+  "performance": {
+    "optimization": {
+      "lazy_loading": "Load screens and data on demand",
+      "image_optimization": "Compress and cache images",
+      "memory_management": "Proper cleanup of resources",
+      "battery_efficiency": "Minimize background processing"
+    },
+    "monitoring": {
+      "crash_reporting": "Crashlytics or Sentry integration",
+      "performance_metrics": "Track app performance",
+      "user_analytics": "User behavior tracking",
+      "error_tracking": "Monitor and fix errors"
+    }
+  },
+
+  "testing": {
+    "unit_tests": {
+      "react_native": "Jest with React Native Testing Library",
+      "flutter": "Built-in Flutter test framework",
+      "coverage": "Aim for 70%+ coverage on mobile"
+    },
+    "integration_tests": {
+      "react_native": "Detox for E2E testing",
+      "flutter": "Flutter integration tests",
+      "device_testing": "Test on multiple devices/OS versions"
+    },
+    "manual_testing": {
+      "device_matrix": "Test on various devices and OS versions",
+      "network_conditions": "Test offline/poor network scenarios",
+      "edge_cases": "Test app lifecycle events"
+    }
+  },
+
+  "deployment": {
+    "app_stores": {
+      "ios": {
+        "app_store_connect": "Upload via Xcode or Transporter",
+        "review_guidelines": "Follow Apple's review guidelines",
+        "certificates": "Manage provisioning profiles"
+      },
+      "android": {
+        "google_play": "Upload via Play Console",
+        "app_signing": "Use Play App Signing",
+        "release_tracks": "Use internal/alpha/beta tracks"
+      }
+    },
+    "ci_cd": {
+      "build_automation": "Automate builds with Fastlane",
+      "testing": "Run tests in CI pipeline",
+      "deployment": "Automated deployment to stores",
+      "monitoring": "Monitor app performance post-release"
+    }
+  }
+}

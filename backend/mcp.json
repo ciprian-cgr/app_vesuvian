@@ -1,0 +1,87 @@
+{
+  "identifier": "fastapi-convex-fullstack",
+  "version": "1.0.0",
+  "type": "application",
+
+  "ai_context": {
+    "purpose": "Full-stack application template with FastAPI backend and Convex real-time features",
+    "use_when": [
+      "Building modern web applications",
+      "Need both traditional API and real-time features",
+      "User authentication and management",
+      "Scalable architecture required"
+    ],
+    "dont_use_when": [
+      "Simple static websites",
+      "Microservices architecture",
+      "Mobile-only applications",
+      "Legacy system integration"
+    ]
+  },
+
+  "architecture": {
+    "backend": {
+      "fastapi": "Traditional REST API with FastAPI",
+      "convex": "Real-time features with Convex backend",
+      "database": "SQLite with SQLAlchemy (FastAPI) + Convex DB",
+      "auth": "JWT tokens (FastAPI) + Convex Auth"
+    },
+    "frontend": {
+      "framework": "React with TypeScript",
+      "styling": "Tailwind CSS",
+      "state": "Convex for real-time, React Query for REST",
+      "routing": "React Router (if needed)"
+    }
+  },
+
+  "patterns": {
+    "follows": [
+      "Clean Architecture with layers",
+      "Repository pattern for data access",
+      "Service layer for business logic",
+      "Real-time updates with Convex",
+      "Type-safe development"
+    ],
+    "enforces": [
+      "Authentication on protected routes",
+      "Input validation on all endpoints",
+      "Error handling and logging",
+      "Environment-based configuration"
+    ]
+  },
+
+  "modules": {
+    "core": "Configuration, database, security, logging",
+    "models": "SQLAlchemy database models",
+    "schemas": "Pydantic validation schemas",
+    "repositories": "Data access layer",
+    "services": "Business logic layer",
+    "api": "FastAPI REST endpoints",
+    "convex": "Real-time backend functions"
+  },
+
+  "getting_started": {
+    "setup": [
+      "Copy .env.example to .env",
+      "Install Python dependencies: pip install -r requirements.txt",
+      "Install Node dependencies: npm install",
+      "Run FastAPI: uvicorn app.main:app --reload",
+      "Run Convex: npx convex dev",
+      "Run frontend: npm run dev"
+    ],
+    "development": [
+      "Add new models in app/models/",
+      "Create repositories in app/repositories/",
+      "Implement services in app/services/",
+      "Add API endpoints in app/api/v1/endpoints/",
+      "Add Convex functions in convex/"
+    ]
+  },
+
+  "dependencies": {
+    "python": ["fastapi", "sqlalchemy", "pydantic", "passlib", "python-jose"],
+    "node": ["convex", "@convex-dev/auth", "react", "typescript", "tailwindcss"],
+    "optional": ["alembic", "pytest", "docker"],
+    "conflicts": []
+  }
+}

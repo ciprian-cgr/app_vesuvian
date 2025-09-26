@@ -1,0 +1,56 @@
+{
+  "identifier": "core",
+  "version": "1.0.0",
+  "type": "module",
+
+  "ai_context": {
+    "purpose": "Core application infrastructure including configuration, database, logging, and security",
+    "use_when": [
+      "Setting up application foundation",
+      "Configuring environment variables",
+      "Managing database connections",
+      "Implementing authentication/authorization",
+      "Setting up logging"
+    ],
+    "dont_use_when": [
+      "Building business logic (use services)",
+      "Creating API endpoints (use api module)",
+      "Defining data models (use models module)"
+    ]
+  },
+
+  "integration": {
+    "backend": {
+      "config": "from app.core.config import get_settings",
+      "database": "from app.core.database import get_db, Base",
+      "security": "from app.core.security import verify_token, create_access_token",
+      "logging": "from app.core.logging import LoggerMixin"
+    },
+    "environment": {
+      "required_vars": ["SECRET_KEY", "DATABASE_URL"],
+      "optional_vars": ["DEBUG", "LOG_LEVEL", "CORS_ORIGINS"],
+      "config_file": ".env"
+    }
+  },
+
+  "patterns": {
+    "follows": [
+      "Settings pattern with Pydantic validation",
+      "Async database sessions with SQLAlchemy",
+      "JWT token authentication",
+      "Structured logging with mixins"
+    ],
+    "enforces": [
+      "Environment variable validation",
+      "Secure password hashing",
+      "Token expiration",
+      "Database connection pooling"
+    ]
+  },
+
+  "dependencies": {
+    "requires": ["pydantic", "sqlalchemy", "passlib", "python-jose"],
+    "optional": ["uvicorn", "python-multipart"],
+    "conflicts": []
+  }
+}

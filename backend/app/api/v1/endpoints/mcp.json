@@ -1,0 +1,65 @@
+{
+  "identifier": "endpoints",
+  "version": "1.0.0",
+  "type": "module",
+
+  "ai_context": {
+    "purpose": "Individual API endpoint implementations with authentication and business logic integration",
+    "use_when": [
+      "Implementing specific API routes",
+      "Handling HTTP requests/responses",
+      "Integrating authentication",
+      "Error handling for endpoints"
+    ],
+    "dont_use_when": [
+      "Defining business logic (use services)",
+      "Database queries (use repositories)",
+      "Data validation (handled by schemas)"
+    ]
+  },
+
+  "integration": {
+    "backend": {
+      "router": "Create APIRouter() instance",
+      "dependencies": "Use FastAPI Depends() for injection",
+      "services": "Inject service classes via database session",
+      "auth": "Apply verify_token for protected routes"
+    },
+    "patterns": {
+      "crud": "Standard Create, Read, Update, Delete operations",
+      "pagination": "Use skip/limit parameters for lists",
+      "filtering": "Query parameters for search/filter",
+      "sorting": "Order by parameters"
+    }
+  },
+
+  "patterns": {
+    "follows": [
+      "FastAPI router pattern",
+      "Dependency injection for services",
+      "HTTP status code conventions",
+      "OpenAPI documentation tags"
+    ],
+    "enforces": [
+      "Authentication on protected endpoints",
+      "Input validation via Pydantic schemas",
+      "Consistent error response format",
+      "Proper HTTP status codes"
+    ]
+  },
+
+  "dependencies": {
+    "requires": ["fastapi", "app.services", "app.schemas", "app.core.database"],
+    "optional": ["app.core.security"],
+    "conflicts": []
+  },
+
+  "examples": {
+    "auth_endpoint": {
+      "code": "@router.post('/login', response_model=Token)\nasync def login(\n    form_data: OAuth2PasswordRequestForm = Depends(),\n    db: AsyncSession = Depends(get_db)\n):\n    service = UserService(db)\n    user = await service.authenticate_user(form_data.username, form_data.password)\n    if not user:\n        raise HTTPException(401, 'Invalid credentials')\n    \n    token = create_access_token({'sub': str(user.id)})\n    return {'access_token': token, 'token_type': 'bearer'}"
+    },
+    "protected_endpoint": {
+      "code": "@router.get('/me', response_model=User)\nasync def get_current_user(\n    db: AsyncSession = Depends(get_db),\n    token_data: dict = Depends(verify_token)\n):\n    service = UserService(db)\n    user = await service.get_user(token_data['sub'])\n    if not user:\n        raise HTTPException(404, 'User not found')\n    return user"
+    }
+  }
+}
