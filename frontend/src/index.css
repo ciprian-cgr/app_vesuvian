@@ -4,36 +4,39 @@
 
 @layer base {
   body {
-    background-color: theme('colors.background-dark');
-    color: theme('colors.text-secondary');
-    font-family: theme('fontFamily.sans');
+    /* Design tokens applied directly to avoid runtime theme() resolution issues */
+    background-color: #1A1A1A; /* background-dark */
+    color: #B8B8B8; /* text-secondary */
+    font-family: apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 }
 
 @layer components {
   /* Focus styles for accessibility */
   .focus-visible:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 2px theme('colors.background-dark'), 0 0 0 4px theme('colors.yellow.DEFAULT');
+      outline: none;
+      /* Focus ring: subtle dark offset + yellow outline per style guide */
+      box-shadow: 0 0 0 2px #1A1A1A, 0 0 0 4px #F4D03F;
   }
 
   /* Custom scrollbar - updated for dark theme */
   .custom-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: theme('colors.surface-light') theme('colors.surface-dark');
+      /* Scrollbar colors match surface tokens */
+      scrollbar-color: #3A3A3A #2A2A2A; /* surface-light on surface-dark */
   }
   .custom-scrollbar::-webkit-scrollbar {
     width: 8px;
   }
   .custom-scrollbar::-webkit-scrollbar-track {
-    background-color: theme('colors.surface-dark');
+    background-color: #2A2A2A; /* surface-dark */
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: theme('colors.surface-light');
-    border-radius: theme('borderRadius.DEFAULT');
+    background-color: #3A3A3A; /* surface-light */
+    border-radius: 8px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: theme('colors.text-tertiary');
+    background-color: #808080; /* text-tertiary */
   }
 
   /* Print helper */
