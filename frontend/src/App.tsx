@@ -1,6 +1,4 @@
-import { useState } from "react";
-import { Authenticated, Unauthenticated, useQuery } from "convex/react";
-import { api } from "../convex/_generated/api";
+import React, { useState, useEffect } from "react";
 import { SignInForm } from "./SignInForm";
 import { Layout } from "./components/layout/Layout";
 import { Dashboard } from "./components/pages/Dashboard";
@@ -9,14 +7,41 @@ import { LoadingSpinner } from "./components/ui/LoadingSpinner";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { ROUTES, STORAGE_KEYS } from "./utils/constants";
 import { Toaster } from "sonner";
+import { useAuth } from "./auth/AuthContext";
+import type { Settings as SettingsType } from "./types";
 
-export default function App() {
-  const loggedInUser = useQuery(api.auth.loggedInUser);
+const API_PREFIX = import.meta.env.VITE_API_PREFIX || "/api/v1";
+
+export default function App(): React.ReactElement {
+  const { currentUser, loading, token } = useAuth();
+  const [settings, setSettings] = useState<SettingsType | null | undefined>(undefined);
   const [currentPage, setCurrentPage] = useLocalStorage<string>(STORAGE_KEYS.CURRENT_PAGE, ROUTES.DASHBOARD);
 
-  const handlePageChange = (page: string) => {
-    setCurrentPage(page);
-  };
+  const handlePageChange = (page: string) => setCurrentPage(page);
+
+  useEffect(() => {
+    let mounted = true;
+    const fetchSettings = async () => {
+      if (!currentUser) {
+        setSettings(null);
+        return;
+      }
+      setSettings(undefined);
+      try {
+        const api = (await import("./lib/api")).api;
+        const data = await api.get<SettingsType>("/users/settings", token);
+        if (!mounted) return;
+        setSettings(data ?? null);
+      } catch (err) {
+        console.error(err);
+        if (mounted) setSettings(null);
+      }
+    };
+    void fetchSettings();
+    return () => {
+      mounted = false;
+    };
+  }, [currentUser, token]);
 
   const renderPage = () => {
     switch (currentPage) {
@@ -28,19 +53,15 @@ export default function App() {
     }
   };
 
-  if (loggedInUser === undefined) {
-    return <LoadingSpinner />;
-  }
+  if (loading) return <LoadingSpinner />;
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Authenticated>
+      {currentUser ? (
         <Layout currentPage={currentPage} onPageChange={handlePageChange}>
           {renderPage()}
         </Layout>
-      </Authenticated>
-
-      <Unauthenticated>
+      ) : (
         <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-md w-full space-y-8">
             <div className="text-center">
@@ -50,7 +71,7 @@ export default function App() {
             <SignInForm />
           </div>
         </div>
-      </Unauthenticated>
+      )}
 
       <Toaster position="top-right" />
     </div>

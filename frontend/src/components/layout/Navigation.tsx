@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Authenticated, Unauthenticated } from "convex/react";
+import { useAuth } from "../../auth/AuthContext";
 import { SignOutButton } from "../../SignOutButton";
 import { Button } from "../ui/Button";
 import { cn } from "../../lib/utils";
@@ -28,8 +28,11 @@ export function Navigation({ currentPage, onPageChange }: NavigationProps) {
             
             {/* Desktop Navigation */}
             <div className="hidden md:ml-6 md:flex md:space-x-8">
-              <Authenticated>
-                {navItems.map((item) => (
+              {/** show nav only when authenticated */}
+              {(() => {
+                const { currentUser } = useAuth();
+                if (!currentUser) return null;
+                return navItems.map((item) => (
                   <button
                     key={item.id}
                     onClick={() => onPageChange(item.id)}
@@ -43,15 +46,16 @@ export function Navigation({ currentPage, onPageChange }: NavigationProps) {
                     <span className="mr-2">{item.icon}</span>
                     {item.label}
                   </button>
-                ))}
-              </Authenticated>
+                ));
+              })()}
             </div>
           </div>
 
           <div className="flex items-center space-x-4">
-            <Authenticated>
-              <SignOutButton />
-            </Authenticated>
+            {(() => {
+              const { currentUser } = useAuth();
+              return currentUser ? <SignOutButton /> : null;
+            })()}
             
             {/* Mobile menu button */}
             <div className="md:hidden">
@@ -73,8 +77,10 @@ export function Navigation({ currentPage, onPageChange }: NavigationProps) {
         {isMobileMenuOpen && (
           <div className="md:hidden">
             <div className="pt-2 pb-3 space-y-1">
-              <Authenticated>
-                {navItems.map((item) => (
+              {(() => {
+                const { currentUser } = useAuth();
+                if (!currentUser) return null;
+                return navItems.map((item) => (
                   <button
                     key={item.id}
                     onClick={() => {
@@ -91,8 +97,8 @@ export function Navigation({ currentPage, onPageChange }: NavigationProps) {
                     <span className="mr-2">{item.icon}</span>
                     {item.label}
                   </button>
-                ))}
-              </Authenticated>
+                ));
+              })()}
             </div>
           </div>
         )}

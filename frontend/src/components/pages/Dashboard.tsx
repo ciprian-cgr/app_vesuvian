@@ -1,27 +1,45 @@
-import { useQuery } from "convex/react";
-import { api } from "../../../convex/_generated/api";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/Card";
 import { LoadingSpinner } from "../ui/LoadingSpinner";
 import { ErrorMessage } from "../ui/ErrorMessage";
+import { useAuth } from "../../auth/AuthContext";
 
 export function Dashboard() {
-  const user = useQuery(api.users.getCurrentUser);
-  const settings = useQuery(api.users.getUserSettings);
+  const { currentUser } = useAuth();
+  const [settings, setSettings] = useState<any | null | undefined>(undefined);
 
-  if (user === undefined || settings === undefined) {
-    return <LoadingSpinner />;
-  }
+  const { token } = useAuth();
 
-  if (user === null) {
-    return <ErrorMessage message="Please sign in to view your dashboard." />;
-  }
+  useEffect(() => {
+    let mounted = true;
+    const fetchSettings = async () => {
+      if (!currentUser) return setSettings(null);
+      setSettings(undefined);
+      try {
+        const data = await (await import("../../lib/api")).api.get("/users/settings", token);
+        if (!mounted) return;
+        setSettings(data);
+      } catch (err) {
+        console.error(err);
+        if (mounted) setSettings(null);
+      }
+    };
+    void fetchSettings();
+    return () => {
+      mounted = false;
+    };
+  }, [currentUser]);
+
+  if (currentUser === undefined || settings === undefined) return <LoadingSpinner />;
+
+  if (currentUser === null) return <ErrorMessage message="Please sign in to view your dashboard." />;
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
         <p className="mt-1 text-sm text-gray-600">
-          Welcome back, {user.email || "User"}!
+          Welcome back, {currentUser.email || "User"}!
         </p>
       </div>
 
@@ -32,9 +50,9 @@ export function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <p className="text-sm text-gray-600">Email: {user.email}</p>
+              <p className="text-sm text-gray-600">Email: {currentUser.email}</p>
               <p className="text-sm text-gray-600">
-                Member since: {new Date(user._creationTime).toLocaleDateString()}
+                Member since: {new Date(currentUser.created_at || Date.now()).toLocaleDateString()}
               </p>
             </div>
           </CardContent>
