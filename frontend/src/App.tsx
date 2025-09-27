@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { SignInForm } from "./SignInForm";
-import { Layout } from "./components/layout/Layout";
-import { Dashboard } from "./components/pages/Dashboard";
-import { Settings } from "./components/pages/Settings";
-import { LoadingSpinner } from "./components/ui/LoadingSpinner";
-import { useLocalStorage } from "./hooks/useLocalStorage";
-import { ROUTES, STORAGE_KEYS } from "./utils/constants";
+import { SignInForm } from "@/domains/users/components/SignInForm";
+import { Layout } from "@/shared/layout/Layout";
+import { Dashboard } from "@/domains/users/pages/Dashboard";
+import { Settings } from "@/domains/users/pages/Settings";
+import { LoadingSpinner } from "@/shared/ui/LoadingSpinner";
+import { useLocalStorage } from "@/shared/hooks/useLocalStorage";
+import { ROUTES, STORAGE_KEYS } from "@/shared/utils/constants";
 import { Toaster } from "sonner";
-import { useAuth } from "./auth/AuthContext";
-import type { Settings as SettingsType } from "./types";
+import { useAuth } from "@/domains/users/auth/AuthContext";
+import { api } from "@/shared/lib/api";
+import { useUserRepository } from "@/domains/users/hooks/useUserRepository";
+import type { Settings as SettingsType } from "@/shared/types";
 
 const API_PREFIX = import.meta.env.VITE_API_PREFIX || "/api/v1";
 
@@ -19,6 +21,8 @@ export default function App(): React.ReactElement {
 
   const handlePageChange = (page: string) => setCurrentPage(page);
 
+  const repo = useUserRepository();
+
   useEffect(() => {
     let mounted = true;
     const fetchSettings = async () => {
@@ -28,8 +32,7 @@ export default function App(): React.ReactElement {
       }
       setSettings(undefined);
       try {
-        const api = (await import("./lib/api")).api;
-        const data = await api.get<SettingsType>("/users/settings", token);
+        const data = await repo.getSettings(token);
         if (!mounted) return;
         setSettings(data ?? null);
       } catch (err) {
@@ -41,7 +44,7 @@ export default function App(): React.ReactElement {
     return () => {
       mounted = false;
     };
-  }, [currentUser, token]);
+  }, [currentUser, token, repo]);
 
   const renderPage = () => {
     switch (currentPage) {
