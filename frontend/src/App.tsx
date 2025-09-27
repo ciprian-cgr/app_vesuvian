@@ -1,22 +1,50 @@
-import { useState } from "react";
-import { Authenticated, Unauthenticated, useQuery } from "convex/react";
-import { api } from "../convex/_generated/api";
-import { SignInForm } from "./SignInForm";
-import { Layout } from "./components/layout/Layout";
-import { Dashboard } from "./components/pages/Dashboard";
-import { Settings } from "./components/pages/Settings";
-import { LoadingSpinner } from "./components/ui/LoadingSpinner";
-import { useLocalStorage } from "./hooks/useLocalStorage";
-import { ROUTES, STORAGE_KEYS } from "./utils/constants";
+import React, { useState, useEffect } from "react";
+import { SignInForm } from "@/domains/users/components/SignInForm";
+import { Layout } from "@/shared/layout/Layout";
+import { Dashboard } from "@/domains/users/pages/Dashboard";
+import { Settings } from "@/domains/users/pages/Settings";
+import { LoadingSpinner } from "@/shared/ui/LoadingSpinner";
+import { useLocalStorage } from "@/shared/hooks/useLocalStorage";
+import { ROUTES, STORAGE_KEYS } from "@/shared/utils/constants";
 import { Toaster } from "sonner";
+import { useAuth } from "@/domains/users/auth/AuthContext";
+import { api } from "@/shared/lib/api";
+import { useUserRepository } from "@/domains/users/hooks/useUserRepository";
+import type { Settings as SettingsType } from "@/shared/types";
 
-export default function App() {
-  const loggedInUser = useQuery(api.auth.loggedInUser);
+const API_PREFIX = import.meta.env.VITE_API_PREFIX || "/api/v1";
+
+export default function App(): React.ReactElement {
+  const { currentUser, loading, token } = useAuth();
+  const [settings, setSettings] = useState<SettingsType | null | undefined>(undefined);
   const [currentPage, setCurrentPage] = useLocalStorage<string>(STORAGE_KEYS.CURRENT_PAGE, ROUTES.DASHBOARD);
 
-  const handlePageChange = (page: string) => {
-    setCurrentPage(page);
-  };
+  const handlePageChange = (page: string) => setCurrentPage(page);
+
+  const repo = useUserRepository();
+
+  useEffect(() => {
+    let mounted = true;
+    const fetchSettings = async () => {
+      if (!currentUser) {
+        setSettings(null);
+        return;
+      }
+      setSettings(undefined);
+      try {
+        const data = await repo.getSettings(token);
+        if (!mounted) return;
+        setSettings(data ?? null);
+      } catch (err) {
+        console.error(err);
+        if (mounted) setSettings(null);
+      }
+    };
+    void fetchSettings();
+    return () => {
+      mounted = false;
+    };
+  }, [currentUser, token, repo]);
 
   const renderPage = () => {
     switch (currentPage) {
@@ -28,19 +56,15 @@ export default function App() {
     }
   };
 
-  if (loggedInUser === undefined) {
-    return <LoadingSpinner />;
-  }
+  if (loading) return <LoadingSpinner />;
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Authenticated>
+      {currentUser ? (
         <Layout currentPage={currentPage} onPageChange={handlePageChange}>
           {renderPage()}
         </Layout>
-      </Authenticated>
-
-      <Unauthenticated>
+      ) : (
         <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-md w-full space-y-8">
             <div className="text-center">
@@ -50,7 +74,7 @@ export default function App() {
             <SignInForm />
           </div>
         </div>
-      </Unauthenticated>
+      )}
 
       <Toaster position="top-right" />
     </div>

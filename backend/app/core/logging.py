@@ -3,8 +3,6 @@ Logging configuration for the application.
 """
 import logging
 import sys
-from typing import Dict, Any
-
 from app.core.config import get_settings
 
 
