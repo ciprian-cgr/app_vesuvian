@@ -1,0 +1,1 @@
+from app.domains.exercise.routes.exercises import router

@@ -10,11 +10,20 @@ from sqlalchemy import (
     ForeignKey,
     Boolean,
     JSON,
+    Integer,
+    UniqueConstraint,
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from app.core.database import Base
+
+
+class WorkoutPhaseType(str, enum.Enum):
+    WARMUP = "warmup"
+    MAIN = "main"
+    ACCESSORY = "accessory"
+    COOLDOWN = "cooldown"
 
 
 class WorkoutType(str, enum.Enum):
@@ -60,3 +69,24 @@ class Workout(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     cycle = relationship("TrainingCycle", back_populates="workouts")
+    phases = relationship("WorkoutPhase", back_populates="workout", cascade="all, delete-orphan")
+
+
+class WorkoutPhase(Base):
+    __tablename__ = "workout_phases"
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid4()))
+    workout_id = Column(String, ForeignKey("workouts.id"), nullable=False)
+    name = Column(String, nullable=False)
+    description = Column(Text)
+    phase_type = Column(SAEnum(WorkoutPhaseType), nullable=False)
+    position = Column(Integer, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
+    workout = relationship("Workout", back_populates="phases")
+    workout_exercises = relationship("WorkoutExercise", back_populates="phase", cascade="all, delete-orphan")
+
+    __table_args__ = (
+        UniqueConstraint("workout_id", "position", name="uq_workout_phase_position"),
+    )

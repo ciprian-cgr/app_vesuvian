@@ -19,6 +19,12 @@ from app.domains.program.models import (  # noqa: F401
     ProgramAdaptation,
     TrainingCycle,
     Workout,
+    WorkoutPhase,
+)
+from app.domains.exercise.models import (  # noqa: F401
+    Exercise,
+    WorkoutExercise,
+    UserExerciseData,
 )
 from app.domains.users.models.user import User  # Import all models for Alembic autogenerate  # noqa: F401
 

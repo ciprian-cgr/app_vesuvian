@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Barbell Back Squat",
+    "aliases": ["Squat", "BB Squat"],
+    "movement_category": "strength",
+    "exercise_classification": "compound",
+    "muscle_involvement": {
+      "primary": ["quadriceps", "glutes", "adductors"],
+      "secondary": ["hamstrings", "erector spinae"]
+    },
+    "primary_adaptations": ["maximal_strength", "hypertrophy"],
+    "secondary_adaptations": ["strength_endurance"],
+    "demands": {
+      "metabolic": 4,
+      "cardiovascular": 3,
+      "neurological": 4
+    },
+    "primary_equipment": "barbell",
+    "alternative_equipment": ["dumbbells", "kettlebells"],
+    "technique_complexity": 4,
+    "contraindications": ["Recent knee surgery", "Lower back pain"],
+    "prerequisites": ["Goblet Squat proficiency"],
+    "setup_instructions": "Set the barbell in a squat rack at shoulder height. Position yourself under the bar, resting it on your upper back. Grasp the bar with both hands, lift it off the rack, and take a step back.",
+    "execution_cues": [
+      "Keep your chest up and back straight.",
+      "Descend until your thighs are at least parallel to the floor.",
+      "Drive through your heels to return to the starting position."
+    ],
+    "common_mistakes": ["Knees caving inward", "Leaning too far forward"],
+    "safety_notes": ["Use safety bars in the squat rack.", "Start with a light weight to warm up."],
+    "progressions": [],
+    "regressions": [],
+    "alternatives": [],
+    "demonstration_url": null,
+    "form_video_url": null
+  },
+  {
+    "name": "Push-up",
+    "aliases": ["Press-up"],
+    "movement_category": "strength",
+    "exercise_classification": "compound",
+    "muscle_involvement": {
+      "primary": ["pectorals", "deltoids", "triceps"],
+      "secondary": ["core", "serratus anterior"]
+    },
+    "primary_adaptations": ["muscular_endurance", "hypertrophy"],
+    "secondary_adaptations": ["strength_endurance"],
+    "demands": {
+      "metabolic": 2,
+      "cardiovascular": 2,
+      "neurological": 2
+    },
+    "primary_equipment": "bodyweight",
+    "alternative_equipment": [],
+    "technique_complexity": 2,
+    "contraindications": ["Wrist pain", "Shoulder impingement"],
+    "prerequisites": [],
+    "setup_instructions": "Get into a high plank position with your hands slightly wider than your shoulders.",
+    "execution_cues": [
+      "Lower your body until your chest nearly touches the floor.",
+      "Keep your body in a straight line from head to heels.",
+      "Push back up to the starting position."
+    ],
+    "common_mistakes": ["Sagging hips", "Flaring elbows"],
+    "safety_notes": [],
+    "progressions": [],
+    "regressions": [],
+    "alternatives": [],
+    "demonstration_url": null,
+    "form_video_url": null
+  }
+]
