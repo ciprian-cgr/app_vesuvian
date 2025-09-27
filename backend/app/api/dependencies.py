@@ -13,7 +13,8 @@ from app.domains.program.repositories import (
     WorkoutRepository,
 )
 from app.domains.program.services import ProgramService
-from app.domains.users import UserRepository, UserService
+from app.domains.users.repositories.user import UserRepository
+from app.domains.users.services.user import UserService
 
 
 def get_user_service(db: AsyncSession = Depends(get_db)) -> UserService:
@@ -36,6 +37,16 @@ from app.domains.daily_state.repositories import (
     DailyStateRepository,
 )
 from app.domains.daily_state.services import DailyStateService
+from app.domains.exercise.repositories.exercise_repository import (
+    SQLAlchemyExerciseRepository,
+)
+from app.domains.exercise.services.exercise_service import ExerciseService
+
+
+def get_exercise_service(db: AsyncSession = Depends(get_db)) -> ExerciseService:
+    """Get exercise service instance wired with repository implementation."""
+    repository = SQLAlchemyExerciseRepository(db)
+    return ExerciseService(exercise_repository=repository)
 
 
 def get_ai_service(db: AsyncSession = Depends(get_db)) -> AIService:

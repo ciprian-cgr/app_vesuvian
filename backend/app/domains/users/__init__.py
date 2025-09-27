@@ -8,8 +8,6 @@ from app.domains.users.models.user import User as UserModel
 from app.domains.users.schemas.user import User, UserCreate, UserUpdate, Token
 from app.domains.users.repositories.user import IUserRepository, UserRepository
 from app.domains.users.services.user import UserService
-from app.domains.users.routes.users import router as users_router
-from app.domains.users.routes.auth import router as auth_router
 
 __all__ = [
     "UserModel",
@@ -20,6 +18,4 @@ __all__ = [
     "IUserRepository",
     "UserRepository",
     "UserService",
-    "users_router",
-    "auth_router",
 ]
