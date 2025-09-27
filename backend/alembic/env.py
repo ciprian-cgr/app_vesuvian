@@ -9,7 +9,20 @@ from alembic import context  # type: ignore[attr-defined]
 
 # Import your models here
 from app.core.database import Base
+from app.domains.ai.models import AIContext  # noqa: F401
+from app.domains.daily_state.models import (  # noqa: F401
+    ContextualRecommendation,
+    DailyState,
+)
+from app.domains.program.models import (  # noqa: F401
+    Program,
+    ProgramAdaptation,
+    TrainingCycle,
+    Workout,
+)
 from app.domains.users.models.user import User  # Import all models for Alembic autogenerate  # noqa: F401
+
+from app.core.config import get_settings
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -19,6 +32,10 @@ config = context.config
 # This line sets up loggers basically.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
+
+# Set the database URL from settings
+settings = get_settings()
+config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 
 # add your model's MetaData object here
 # for 'autogenerate' support
@@ -32,9 +49,8 @@ target_metadata = Base.metadata
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode."""
-    url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=url,
+        url=config.get_main_option("sqlalchemy.url"),
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
