@@ -2,7 +2,7 @@ import React from 'react'
 import { render, waitFor } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import { act } from 'react'
-import { AuthProvider, useAuth } from '../src/auth/AuthContext'
+import { AuthProvider, useAuth } from '@/domains/users/auth/AuthContext'
 
 function Consumer() {
   const { currentUser, signIn, signOut, loading } = useAuth()
@@ -20,14 +20,18 @@ describe('AuthContext', () => {
   it('signs in and signs out', async () => {
     // mock login response
     globalThis.fetch = vi.fn((url: string) => {
-      if (String(url).includes('/auth/login')) {
-        return Promise.resolve(new Response(JSON.stringify({ access_token: 'token' }), { status: 200 }))
+      const urlStr = String(url);
+      if (urlStr.includes('/auth/login')) {
+        return Promise.resolve(new Response(JSON.stringify({ access_token: 'token' }), { status: 200 }));
       }
-      if (String(url).includes('/users/me')) {
-        return Promise.resolve(new Response(JSON.stringify({ id: 1, username: 'bob', email: 'a@b' }), { status: 200 }))
+      if (urlStr.includes('/users/me')) {
+        return Promise.resolve(new Response(JSON.stringify({ id: 1, username: 'bob', email: 'a@b' }), { status: 200 }));
       }
-      return Promise.resolve(new Response(null, { status: 404 }))
-    }) as any
+      if (urlStr.includes('/auth/logout')) {
+        return Promise.resolve(new Response(null, { status: 200 }));
+      }
+      return Promise.resolve(new Response(null, { status: 404 }));
+    }) as any;
 
     const { getByText, getByTestId } = render(
       <AuthProvider>
