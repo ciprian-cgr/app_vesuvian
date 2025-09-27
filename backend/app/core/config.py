@@ -1,12 +1,11 @@
 """
 Application configuration management with environment validation.
 """
-import os
 from functools import lru_cache
-from typing import List
+from typing import List, Any
 
-from pydantic_settings import BaseSettings
-from pydantic import model_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import field_validator
 
 
 class Settings(BaseSettings):
@@ -34,24 +33,29 @@ class Settings(BaseSettings):
     # Logging
     LOG_LEVEL: str = "INFO"
 
-    @model_validator("CORS_ORIGINS", mode="before")
-    def assemble_cors_origins(cls, v):
+    @field_validator("CORS_ORIGINS", mode="before")
+    def assemble_cors_origins(cls, v: Any) -> Any:
         if isinstance(v, str):
             return [i.strip() for i in v.split(",")]
         return v
 
-    @model_validator("ALLOWED_HOSTS", mode="before")
-    def assemble_allowed_hosts(cls, v):
+    @field_validator("ALLOWED_HOSTS", mode="before")
+    def assemble_allowed_hosts(cls, v: Any) -> Any:
         if isinstance(v, str):
             return [i.strip() for i in v.split(",")]
         return v
     
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
+    # Pydantic v2 config using SettingsConfigDict for BaseSettings
+    # (assigned after class definition to avoid mypy class-variable override checks)
+    pass
 
 
 @lru_cache()
 def get_settings() -> Settings:
     """Get cached application settings."""
     return Settings()
+
+
+# Assign model_config after class definition to avoid mypy complaining about
+# class variable overrides on BaseSettings.
+Settings.model_config = SettingsConfigDict(env_file=".env", case_sensitive=True)

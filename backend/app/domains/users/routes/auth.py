@@ -1,5 +1,5 @@
 """
-Authentication endpoints.
+Authentication endpoints for users domain.
 """
 from datetime import timedelta
 
@@ -30,6 +30,7 @@ async def register(
     return User.model_validate(created)
 
 
+
 @router.post("/login", response_model=Token)
 async def login(
     response: Response,
@@ -55,7 +56,6 @@ async def login(
     # set HttpOnly cookie for refresh token on response
     set_refresh_cookie(response, refresh_token)
     return Token(access_token=access_token, token_type="bearer")
-
 
 
 
@@ -100,6 +100,7 @@ async def logout(response: Response, request: Request, user_service: UserService
     """Logout: revoke refresh tokens by bumping user's refresh_token_version and clearing cookie."""
     # If user is identified via cookie, attempt to revoke their tokens
     refresh = request.cookies.get(REFRESH_COOKIE_NAME)
+
     if refresh:
         try:
             token_data = verify_refresh_token(refresh)

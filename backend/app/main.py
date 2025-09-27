@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 
+from typing import AsyncGenerator
 from app.api.v1.router import api_router
 from app.core.config import get_settings
 from app.core.database import create_tables
@@ -16,7 +17,7 @@ from app.core.logging import setup_logging
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Application lifespan events."""
     # Startup
     setup_logging()
@@ -27,8 +28,7 @@ async def lifespan(app: FastAPI):
     
     # Shutdown
     logging.info("Application shutdown")
-
-
+    
 def create_application() -> FastAPI:
     """Create and configure FastAPI application."""
     settings = get_settings()
@@ -63,7 +63,7 @@ def create_application() -> FastAPI:
     
     # Global exception handler
     @app.exception_handler(Exception)
-    async def global_exception_handler(request: Request, exc: Exception):
+    async def global_exception_handler(request: Request, exc: Exception) -> JSONResponse:
         logging.error(f"Global exception: {exc}", exc_info=True)
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -77,6 +77,6 @@ app = create_application()
 
 
 @app.get("/health")
-async def health_check():
+async def health_check() -> dict:
     """Health check endpoint."""
     return {"status": "healthy"}
