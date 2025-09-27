@@ -36,23 +36,23 @@ export function Dashboard() {
   if (currentUser === null) return <ErrorMessage message="Please sign in to view your dashboard." />;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-loose">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="mt-1 text-sm text-gray-600">
+        <h1 className="text-h1 text-text-primary">Dashboard</h1>
+        <p className="mt-1 text-body text-text-secondary">
           Welcome back, {currentUser.email || "User"}!
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-default">
         <Card>
           <CardHeader>
             <CardTitle>Profile</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              <p className="text-sm text-gray-600">Email: {currentUser.email}</p>
-              <p className="text-sm text-gray-600">
+            <div className="space-y-tight">
+              <p className="text-body text-text-secondary">Email: {currentUser.email}</p>
+              <p className="text-caption text-text-tertiary">
                 Member since: {new Date(currentUser.created_at || Date.now()).toLocaleDateString()}
               </p>
             </div>
@@ -64,12 +64,12 @@ export function Dashboard() {
             <CardTitle>Settings</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              <p className="text-sm text-gray-600">Theme: {settings?.theme || "System"}</p>
-              <p className="text-sm text-gray-600">
+            <div className="space-y-tight">
+              <p className="text-body text-text-secondary">Theme: {settings?.theme || "System"}</p>
+              <p className="text-body text-text-secondary">
                 Notifications: {settings?.notifications ? "Enabled" : "Disabled"}
               </p>
-              <p className="text-sm text-gray-600">Language: {settings?.language || "English"}</p>
+              <p className="text-body text-text-secondary">Language: {settings?.language || "English"}</p>
             </div>
           </CardContent>
         </Card>
@@ -79,9 +79,9 @@ export function Dashboard() {
             <CardTitle>Quick Actions</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              <p className="text-sm text-gray-600">Everything looks good!</p>
-              <p className="text-sm text-gray-600">No actions needed.</p>
+            <div className="space-y-tight">
+              <p className="text-body text-text-secondary">Everything looks good!</p>
+              <p className="text-caption text-text-tertiary">No actions needed.</p>
             </div>
           </CardContent>
         </Card>

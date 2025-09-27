@@ -72,10 +72,10 @@ export function Settings(): React.ReactElement {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-loose">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
-        <p className="mt-1 text-sm text-gray-600">Manage your account preferences and settings.</p>
+        <h1 className="text-h1 text-text-primary">Settings</h1>
+        <p className="mt-1 text-body text-text-secondary">Manage your account preferences and settings.</p>
       </div>
 
       <Card>
@@ -83,7 +83,7 @@ export function Settings(): React.ReactElement {
           <CardTitle>Preferences</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-default">
             <Select
               label="Theme"
               options={themeOptions}
@@ -93,16 +93,22 @@ export function Settings(): React.ReactElement {
 
             <Select label="Language" options={languageOptions} value={formData.language} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({ ...formData, language: e.target.value })} />
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Notifications</label>
-              <div className="flex items-center space-x-2">
-                <input type="checkbox" id="notifications" checked={formData.notifications} onChange={(e) => setFormData({ ...formData, notifications: e.target.checked })} className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
-                <label htmlFor="notifications" className="text-sm text-gray-600">Enable email notifications</label>
+            <div className="space-y-tight">
+              <label className="text-body text-text-secondary">Notifications</label>
+              <div className="flex items-center space-x-2 pt-1">
+                <input
+                  type="checkbox"
+                  id="notifications"
+                  checked={formData.notifications}
+                  onChange={(e) => setFormData({ ...formData, notifications: e.target.checked })}
+                  className="h-4 w-4 appearance-none rounded-sm border border-surface-light bg-surface-dark checked:bg-yellow checked:border-yellow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-background-dark"
+                />
+                <label htmlFor="notifications" className="text-body text-text-secondary">Enable email notifications</label>
               </div>
             </div>
 
-            <div className="flex justify-end">
-              <Button type="submit" loading={isLoading}>Save Changes</Button>
+            <div className="flex justify-end pt-2">
+              <Button variant="primary" type="submit" loading={isLoading}>Save Changes</Button>
             </div>
           </form>
         </CardContent>

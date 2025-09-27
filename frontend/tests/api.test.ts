@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { api } from '../src/lib/api'
+import { api } from '@/shared/lib/api'
 
 describe('api client', () => {
   it('parses JSON and returns typed data', async () => {

@@ -60,7 +60,7 @@ export function Navigation({ currentPage, onPageChange }: NavigationProps) {
             {/* Mobile menu button */}
             <div className="md:hidden">
               <Button
-                variant="ghost"
+                variant="tertiary"
                 size="sm"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 aria-label="Toggle mobile menu"

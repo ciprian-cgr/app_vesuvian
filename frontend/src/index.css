@@ -2,116 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --color-light: #ffffff;
-  --color-dark: #171717;
-}
-
 @layer base {
   body {
-    font-family: "Inter Variable", ui-sans-serif, system-ui, -apple-system,
-      BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
-      "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-      "Segoe UI Symbol", "Noto Color Emoji";
-    color: var(--color-dark);
-    background: var(--color-light);
+    /* Design tokens applied directly to avoid runtime theme() resolution issues */
+    background-color: #1A1A1A; /* background-dark */
+    color: #B8B8B8; /* text-secondary */
+    font-family: apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 }
 
 @layer components {
-  /* Small helper components created by composing Tailwind utilities.
-     Using plain CSS here to avoid @apply generation issues in v4 until
-     we convert markup to use utility classes exclusively. */
-  .accent-text {
-    color: #4b5563; /* text-gray-600 */
-  }
-
-  /* Auth input fields - only use for authentication forms */
-  .auth-input-field {
-    width: 100%;
-    padding: 0.75rem 1rem; /* py-3 px-4 */
-    border-radius: 0.5rem; /* rounded-container from tailwind config */
-    background-color: #ffffff;
-    border: 1px solid #e5e7eb; /* gray-200 */
-    outline: none;
-    transition: box-shadow 0.15s ease, border-color 0.15s ease;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-  }
-  .auth-input-field:hover {
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-  }
-  .auth-input-field:focus {
-    border-color: #3b82f6; /* primary */
-    box-shadow: 0 0 0 4px rgba(59,130,246,0.06);
-  }
-
-  /* Auth buttons - only use for authentication forms */
-  .auth-button {
-    width: 100%;
-    padding: 0.75rem 1rem; /* py-3 px-4 */
-    border-radius: 0.375rem;
-    background-color: #3b82f6; /* primary */
-    color: #ffffff;
-    font-weight: 600;
-    transition: background-color 0.15s ease, box-shadow 0.15s ease;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-  }
-  .auth-button:hover {
-    background-color: #2563eb; /* primary hover */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-  }
-  .auth-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  /* Global utility classes (animations) */
-  .animate-fade-in {
-    animation: fadeIn 0.5s ease-in-out;
-  }
-  .animate-slide-up {
-    animation: slideUp 0.3s ease-out;
-  }
-
   /* Focus styles for accessibility */
   .focus-visible:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 4px rgba(59,130,246,0.12);
+      outline: none;
+      /* Focus ring: subtle dark offset + yellow outline per style guide */
+      box-shadow: 0 0 0 2px #1A1A1A, 0 0 0 4px #F4D03F;
   }
 
-  /* Custom scrollbar (still CSS) */
+  /* Custom scrollbar - updated for dark theme */
   .custom-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: #cbd5e1 #f1f5f9;
+      /* Scrollbar colors match surface tokens */
+      scrollbar-color: #3A3A3A #2A2A2A; /* surface-light on surface-dark */
   }
   .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
   }
   .custom-scrollbar::-webkit-scrollbar-track {
-    background: #f1f5f9;
-    border-radius: 3px;
+    background-color: #2A2A2A; /* surface-dark */
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 3px;
+    background-color: #3A3A3A; /* surface-light */
+    border-radius: 8px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background-color: #808080; /* text-tertiary */
   }
 
   /* Print helper */
   .no-print {
     display: none !important;
-  }
-}
-
-@media (prefers-contrast: high) {
-  .border-gray-200 {
-    border-color: #9ca3af; /* gray-400 */
-  }
-
-  .text-gray-600 {
-    color: #1f2937; /* gray-800 */
   }
 }
 
